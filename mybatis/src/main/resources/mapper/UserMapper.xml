@@ -1,0 +1,41 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bestwu.mybatis.mapper.UserMapper">
+
+    <resultMap id="Base_Result_Map" type="com.bestwu.mybatis.entity.UserEntity">
+        <id column="user_id" property="userId" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+
+        <result column="creator_id" property="creatorId" />
+        <result column="create_time" property="createTime" />
+        <result column="modifier_id" property="modifierId" />
+        <result column="modify_time" property="modifyTime" />
+        <result column="is_enabled" property="enableFlag" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_id, username, password, creator_id, create_time, modifier_id, modify_time, is_enabled
+    </sql>
+
+    <select id="queryList" resultMap="Base_Result_Map">
+        select <include refid="Base_Column_List" />
+        from user
+        where is_enabled = 1
+    </select>
+
+    <select id="queryById" parameterType="long" resultMap="Base_Result_Map">
+        select <include refid="Base_Column_List" />
+        from user
+        where user_id = #{userId, jdbcType=BIGINT}
+        and is_enabled = 1
+    </select>
+
+    <select id="queryByNameAndPassword" parameterType="com.bestwu.mybatis.entity.UserEntity"
+            resultMap="Base_Result_Map">
+        select <include refid="Base_Column_List" />
+        from user
+        where username = #{username, jdbcType=VARCHAR}
+        and password = #{password, jdbcType=VARCHAR}
+        and is_enabled = 1
+    </select>
+</mapper>
